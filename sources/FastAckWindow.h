@@ -5,12 +5,15 @@
 #ifndef ICINGAGUI_FASTACKWINDOW_H
 #define ICINGAGUI_FASTACKWINDOW_H
 
-#include <TGUI/TGUI.hpp>
+#include "Utilities.h"
 #include <ctime>
-#include <iostream>
+
 
 class FastAckWindow {
 private:
+
+
+
     tgui::ChildWindow::Ptr m_window;
 
     tgui::TextBox::Ptr m_text_box;
@@ -32,9 +35,10 @@ private:
     tgui::ChildWindow::Ptr m_invalid_window;
     tgui::Label::Ptr m_invalid_label;
     tgui::Button::Ptr m_invalid_button;
+    std::string m_service_name;
 
 public:
-    FastAckWindow();
+    FastAckWindow(std::string);
 
     tgui::ChildWindow::Ptr get_window() {
         return m_window;
@@ -54,6 +58,8 @@ public:
     void invalid_input_close(tgui::ChildWindow::Ptr);
 
     void valid_input_caller(tgui::ChildWindow::Ptr);
+
+    void post_input(std::string comment);
 
 
 

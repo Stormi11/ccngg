@@ -4,7 +4,9 @@
 #include "FastAckWindow.h"
 
 
-FastAckWindow::FastAckWindow() {
+FastAckWindow::FastAckWindow(std::string service_name) {
+
+
     m_window = tgui::ChildWindow::create();
     m_window->setTitle("Fast Acknowledge");
     m_window->setSize({"30%", "20%"});
@@ -109,6 +111,9 @@ FastAckWindow::FastAckWindow() {
     m_invalid_label->setTextSize(16);
     m_invalid_label->setPosition({"5%","5%"});
     m_invalid_label->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Center);
+
+    m_service_name=service_name;
+
 }
 
 void FastAckWindow::submit_button_handler(tgui::ChildWindow::Ptr window) {
@@ -171,6 +176,8 @@ void FastAckWindow::submit_button_handler(tgui::ChildWindow::Ptr window) {
         FastAckWindow::invalid_input_caller(window);
         return;
     }
+
+    FastAckWindow::post_input(comment);
 
 
         std::cout << "valid input? " << valid_input << std::endl;
@@ -237,6 +244,28 @@ void FastAckWindow::valid_input_caller(tgui::ChildWindow::Ptr window)
     invalid_window->setTitle("Success!");
     (window->get<tgui::Label>("fast_ack_invalid_label"))->setText("Acknowledgement has been set :)");
     (window->get<tgui::Button>("fast_ack_invalid_button"))->connect("Pressed",&FastAckWindow::window_destroy, this, window);
+}
+
+void FastAckWindow::post_input(std::string comment) {
+    std::cout << m_service_name << std::endl;
+     //std::string whole = m_service_name;
+    //std::size_t pos = whole.rfind('@');
+    //std::string service (whole.substr(0,pos));
+   // std::string host (whole.substr(pos + 1));
+    //std::cout << host << '!' << service << std::endl;
+
+   /* std::string var_curl (R"(curl -k -s -u )" + config.get_apiusername() + ':' + config.get_apiuserpassword()+
+                          R"( -H "accept: application/json" -X POST ")" + config.get_address() +
+                          R"(actions/acknowledge-problem?service=)" + host + '!' + service + " -d )");
+
+//std::string var_curl (R"(curl -k -s -u root:icinga -H "accept: application/json" -X POST "https://192.168.33.5:5665/v1/actions/acknowledge-problem?type=Service&filter=service.state==2&service.state_type=1" -d )");
+    std::string var_json1 (R"(\"author\":)" + config.get_username());
+    std::string var_json2 (R"(\"comment\":)" + comment);
+    std::string var_json3 (R"(\"notify\": true)");
+
+    std::string command_s ( var_curl + "\"{" + var_json1 + "," + var_json2 + "," + var_json3 + "}\"");
+    system(command_s.c_str());
+*/
 }
 
 void FastAckWindow::invalid_input_close(tgui::ChildWindow::Ptr window)

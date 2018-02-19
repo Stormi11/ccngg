@@ -5,6 +5,7 @@
 #ifndef ICINGAGUI_UTILITIES_H
 #define ICINGAGUI_UTILITIES_H
 
+#include <TGUI/TGUI.hpp>
 #include <SFML/System.hpp>
 #include "json.hpp"
 #include <iostream>

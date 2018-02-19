@@ -167,7 +167,6 @@ std::string convert_time_special(int unixtime)
 void refresh_services(tgui::Label::Ptr label[31][6],tgui::Button::Ptr button[31])
 {
     static float s_tab;
-    static std::string request("request");
 
     s_tab = active_tab(33);
 
@@ -195,10 +194,10 @@ void refresh_services(tgui::Label::Ptr label[31][6],tgui::Button::Ptr button[31]
                 temp_service = all_hosts[current_service].at("attrs");
                 button[current_element]->show();
 
-                /*label[current_element][0]->setText(temp_service["name"].get<std::string>()
+                label[current_element][0]->setText(temp_service["name"].get<std::string>()
                                                    + '@'
                                                    + all_hosts[current_service]["joins"]["host"]["name"].get<std::string>());
-                */label[current_element][0]->setText(temp_service["__name"].get<std::string>());
+                //label[current_element][0]->setText(temp_service["__name"].get<std::string>());
                                                    //+ '@'
                 //all_hosts[current_service]["joins"]["host"]["name"].get<std::string>());
                 label[current_element][0]->show();
@@ -214,9 +213,6 @@ void refresh_services(tgui::Label::Ptr label[31][6],tgui::Button::Ptr button[31]
                 current_element++;
 
             }
-
-            //else if (all_hosts[j]["attrs"]["name"] == "")
-            //     break;
         }
         else
         {
@@ -237,10 +233,12 @@ void refresh_services(tgui::Label::Ptr label[31][6],tgui::Button::Ptr button[31]
 
 void fast_ack_popup_open (tgui::Label::Ptr const &service)
 {
-    FastAckWindow popup;
+    std::string label_name (service->getText());
+    FastAckWindow popup(label_name);
     auto gui = (((service->getParent())->getParent())->getParent())->getParent();
-    gui -> add(popup.get_window(), "pupup_window");
-    std::cout << "popup window call worked" << std::endl;
+    gui -> add(popup.get_window(), "popup_window");
+    std::cout << "popup window call worked at service " << label_name << std::endl;
+
 }
 
 
@@ -284,8 +282,6 @@ tgui::Panel::Ptr init_services(tgui::Group::Ptr services[31],
         button[i]   =  tgui::Button::create();
         button[i]   -> setPosition({"47.3%", "10%"});
         button[i]   -> setSize({"18", "18"});
-        button[i]   -> hide();
-
         services[i] -> add(button[i]);
 
 
@@ -297,7 +293,8 @@ tgui::Panel::Ptr init_services(tgui::Group::Ptr services[31],
         label[i][0] -> setPosition({"0%,0%"});
         label[i][0] -> setTextSize(14);
         label[i][0] ->hide();
-        services[i] -> add(label[i][0]);
+        std::string label_name ("lbl" + std::to_string(i));
+        services[i] -> add(label[i][0], label_name);
 
         ///what problem
         label[i][1] = tgui::Label::create();

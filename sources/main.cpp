@@ -23,22 +23,18 @@ tgui::Panel::Ptr hosts();
 
 void refresh_services(tgui::Label::Ptr label[MAX_ELEMENTS_SERVICES][6],
                       tgui::Button::Ptr button[MAX_ELEMENTS_SERVICES]);
-std::string var_curl (R"(curl -k -s -u )" + config.get_apiusername() + ':' + config.get_apiuserpassword()+
-                              R"( -H "accept: application/json" -X POST ")" + config.get_address() +
-                              R"(actions/acknowledge-problem?service=icinga2!disk22" -d )");
-
-//std::string var_curl (R"(curl -k -s -u root:icinga -H "accept: application/json" -X POST "https://192.168.33.5:5665/v1/actions/acknowledge-problem?type=Service&filter=service.state==2&service.state_type=1" -d )");
-std::string var_json1 (R"(\"author\": \"icingaadmin\")");
-std::string var_json2 (R"(\"comment\": \"Global outage. Working on it.\")");
-std::string var_json3 (R"(\"notify\": true)");
-
-std::string command_s ( var_curl + "\"{" + var_json1 + "," + var_json2 + "," + var_json3 + "}\"");
 
 void acknowledgetest()
 
 
 {
-    system(command_s.c_str()) ;
+    //system(command_s.c_str()) ;
+    std::string whole ("map-1@map-server-beijing-1");
+    std::size_t found = whole.rfind('@');
+    std::string service (whole.substr(0,found));
+    std::string host (whole.substr(found + 1));
+    std::cout << host << '!' << service << std::endl;
+
 }
 
 
@@ -72,13 +68,9 @@ int main()
     //acknowledgetest();
      while (window.isOpen())
     {
-        /*
-        if (gui.get("testWindow") != nullptr)
-            std::cout << "testWindow found :)" << std::endl;
-        else
-            std::cout << "not found" << std::endl;
+
         ///refreshes services every XX seconds
-        */
+
          if (gui_clock.get_time_as_seconds() > REFRESH_TIME_IN_SECONDS)
         {
             std::cout<< "refreshed" << std::endl;
@@ -106,7 +98,7 @@ int main()
 
     return EXIT_SUCCESS;
 }
-//**/
+//*/
 /*/
 #include <iostream>
 #include "json.hpp"
@@ -116,11 +108,11 @@ using json = nlohmann::json;
 
 int main()
 {
-    std::ifstream i("C:/temp/test.json");
+    std::ifstream i("C:/icingaGUI/cmake-build-debug/data/result.json");
     json j;
     i >> j;
-    json n = j.at("results");
-    std::ofstream o("C:/temp/pretty.json");
-    o<<std::setw(4)<<n<<std::endl;
+    //json n = j.at("results");
+    std::ofstream o("C:/icingaGUI/cmake-build-debug/data/pretty.json");
+    o<<std::setw(4)<<j<<std::endl;
 }
 //*/
